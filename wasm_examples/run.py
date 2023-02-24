@@ -13,3 +13,5 @@ def call_wasm_fun(file_name, fn_name, *args):
 
 print(call_wasm_fun('simple.wat', 'meaning_of_life'))
 print(call_wasm_fun('simple.wat', 'multiply', 11, 9))
+print(call_wasm_fun('simple.wat', 'add1', 15))
+print(call_wasm_fun('simple.wat', 'average', float(20), float(15)))
