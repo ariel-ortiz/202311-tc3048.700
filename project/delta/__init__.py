@@ -65,11 +65,11 @@ class Compiler:
 
         self.__parser = create_parser()
         self.__parse_tree = syntax_analysis()
-        if Phase.SEMANTIC_ANALYSIS.value <= phase.value:
+        if phase.value >= Phase.SEMANTIC_ANALYSIS.value:
             self.__symbol_table = semantic_analysis()
-        if Phase.CODE_GENERATION.value <= phase.value:
+        if phase.value >= Phase.CODE_GENERATION.value:
             self.__wat_code = generate_wat_code()
-        if Phase.EVALUATION.value <= phase.value:
+        if phase.value == Phase.EVALUATION.value:
             self.__result = execute_wasm_start_function()
         return self.__result
 
