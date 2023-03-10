@@ -15,3 +15,7 @@ class CodeGenerationVisitor(PTNodeVisitor):
     def __init__(self, symbol_table, **kwargs):
         super().__init__(**kwargs)
         self.__symbol_table = symbol_table
+
+    def visit_expression_start(self, node, children):
+        return CodeGenerationVisitor.WAT_TEMPLATE.format(
+            f'    i32.const {children[0]}\n')
