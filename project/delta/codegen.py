@@ -16,6 +16,14 @@ class CodeGenerationVisitor(PTNodeVisitor):
         super().__init__(**kwargs)
         self.__symbol_table = symbol_table
 
-    def visit_expression_start(self, node, children):
-        return CodeGenerationVisitor.WAT_TEMPLATE.format(
-            f'    i32.const {children[0]}\n')
+    def visit_expression_start(self, _, children):
+        return CodeGenerationVisitor.WAT_TEMPLATE.format(children[0])
+
+    def visit_decimal(self, node, _):
+        return f'    i32.const {node.value}\n'
+
+    def visit_boolean(self, node, children):
+        if children[0] == 'true':
+            return f'    i32.const 1\n'
+        else:
+            return f'    i32.const 0\n'

@@ -18,8 +18,8 @@ class SemanticVisitor(PTNodeVisitor):
     def position(self, node):
         return self.__parser.pos_to_linecol(node.position)
 
-    def visit_expression_start(self, node, children):
-        value = int(children[0])
+    def visit_decimal(self, node, children):
+        value = int(node.value)
         if value > SemanticVisitor.MAX_INT32_VALUE:
             raise SemanticMistake(
                 'Out of range decimal integer literal at position '

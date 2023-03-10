@@ -1,1 +1,3 @@
-expression_start = r'\d+' EOF
+expression_start = (decimal / boolean) EOF
+decimal = r'\d+'
+boolean = 'true' / 'false'
