@@ -20,7 +20,6 @@ class CodeGenerationVisitor(PTNodeVisitor):
         return CodeGenerationVisitor.WAT_TEMPLATE.format(children[0])
 
     def visit_expression(self, _, children):
-        print('children:', children)
         result = [children[0]]
         for i in range(1, len(children), 2):
             result.append(children[i + 1])
@@ -31,13 +30,13 @@ class CodeGenerationVisitor(PTNodeVisitor):
                     result.append('    i32.sub\n')
         return ''.join(result)
 
-    def visit_primary(self, node, children):
+    def visit_primary(self, _, children):
         return children[0]
 
     def visit_decimal(self, node, _):
         return f'    i32.const {node.value}\n'
 
-    def visit_boolean(self, node, children):
+    def visit_boolean(self, _, children):
         if children[0] == 'true':
             return f'    i32.const 1\n'
         else:
