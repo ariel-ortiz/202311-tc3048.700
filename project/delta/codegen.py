@@ -19,6 +19,9 @@ class CodeGenerationVisitor(PTNodeVisitor):
     def visit_expression_start(self, _, children):
         return CodeGenerationVisitor.WAT_TEMPLATE.format(children[0])
 
+    def visit_expression(self, _, children):
+        return children[0]
+
     def visit_decimal(self, node, _):
         return f'    i32.const {node.value}\n'
 
