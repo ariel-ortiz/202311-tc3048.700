@@ -50,7 +50,7 @@ class Compiler:
         def semantic_analysis():
             semantic_visitor = SemanticVisitor(self.__parser)
             visit_parse_tree(self.__parse_tree, semantic_visitor)
-            return {}
+            return semantic_visitor.symbol_table
 
         def generate_wat_code():
             code_visitor = CodeGenerationVisitor(self.__symbol_table)
