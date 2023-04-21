@@ -9,6 +9,8 @@ class SemanticMistake(Exception):
 
 class SemanticVisitor(PTNodeVisitor):
 
+    RESERVED_KEYWORDS = ['true', 'false', 'var']
+
     MAX_INT32_VALUE = 2 ** 31 - 1
 
     def __init__(self, parser, **kwargs):
@@ -32,6 +34,11 @@ class SemanticVisitor(PTNodeVisitor):
             )
 
     def visit_decl_variable(self, node, _):
+        if node.value in SemanticVisitor.RESERVED_KEYWORDS:
+            raise SemanticMistake(
+                'Variable name cannot be a reserved keyword at position '
+                f'{self.position(node)} => {node.value}'
+            )
         if node.value in self.__symbol_table:
             raise SemanticMistake(
                 'Duplicate variable declaration at position '

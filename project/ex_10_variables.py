@@ -8,7 +8,7 @@ x
 '''
 
 c = Compiler('program_start')
-c.realize(source, Phase.CODE_GENERATION)
+c.realize(source, Phase.EVALUATION)
 print(c.parse_tree_str)
 print()
 print(c.symbol_table)
