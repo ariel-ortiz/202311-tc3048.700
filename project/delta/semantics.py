@@ -9,7 +9,7 @@ class SemanticMistake(Exception):
 
 class SemanticVisitor(PTNodeVisitor):
 
-    RESERVED_KEYWORDS = ['true', 'false', 'var']
+    RESERVED_KEYWORDS = ['true', 'false', 'var', 'if', 'else']
 
     MAX_INT32_VALUE = 2 ** 31 - 1
 

@@ -96,3 +96,13 @@ class CodeGenerationVisitor(PTNodeVisitor):
 
     def visit_lhs_variable(self, node, _):
         return f'    local.set ${node.value}\n'
+
+    def visit_block(self, _, children):
+        return ''.join(children)
+
+    def visit_if(self, _, children):
+        result = children[0] + '    if\n' + children[1] + '    else\n'
+        if len(children) == 3:
+            result += children[2]
+        result += '    end\n'
+        return result
