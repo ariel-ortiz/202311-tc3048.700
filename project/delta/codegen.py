@@ -106,3 +106,43 @@ class CodeGenerationVisitor(PTNodeVisitor):
             result += children[2]
         result += '    end\n'
         return result
+
+    def visit_while(self, _, children):
+        return ('    block\n'
+                + '    loop\n'
+                + children[0]
+                + '    i32.eqz\n'
+                + '    br_if 1\n'
+                + children[1]
+                + '    br 0\n'
+                + '    end\n'
+                + '    end\n')
+
+    def visit_for(self, node, children):
+        loop_var, start, direction, finish, body = children
+        if direction == 'upto':
+            comparison = '    i32.gt_s\n'
+            step = '    i32.add\n'
+        else:
+            comparison = '    i32.lt_s\n'
+            step = '    i32.sub\n'
+        return (
+            start
+            + f'    local.set ${loop_var}\n'
+            + '    block\n'
+            + '    loop\n'
+            + f'    local.get ${loop_var}\n'
+            + finish
+            + comparison
+            + '    br_if 1\n'
+            + body
+            + f'    local.get ${loop_var}\n'
+            + '    i32.const 1\n'
+            + step
+            + f'    local.set ${loop_var}\n'
+            + '    br 0\n'
+            + '    end\n'
+            + '    end\n')
+
+    def visit_for_variable(self, node, _):
+        return node.value

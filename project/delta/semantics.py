@@ -9,7 +9,8 @@ class SemanticMistake(Exception):
 
 class SemanticVisitor(PTNodeVisitor):
 
-    RESERVED_KEYWORDS = ['true', 'false', 'var', 'if', 'else']
+    RESERVED_KEYWORDS = ['true', 'false', 'var', 'if', 'else', 'while',
+                         'for', 'upto', 'downto']
 
     MAX_INT32_VALUE = 2 ** 31 - 1
 
@@ -54,9 +55,16 @@ class SemanticVisitor(PTNodeVisitor):
                 f'{self.position(node)} => {node.value}'
             )
 
-    def visit_rhs_variable(self, node, children):
+    def visit_rhs_variable(self, node, _):
         if node.value not in self.__symbol_table:
             raise SemanticMistake(
                 'Undeclared variable reference at position '
+                f'{self.position(node)} => {node.value}'
+            )
+
+    def visit_for_variable(self, node, _):
+        if node.value not in self.__symbol_table:
+            raise SemanticMistake(
+                'Undeclared variable in for statement at position '
                 f'{self.position(node)} => {node.value}'
             )
