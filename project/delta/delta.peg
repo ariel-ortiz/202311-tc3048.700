@@ -14,7 +14,8 @@ for = 'for' for_variable '=' expression ('upto' / 'downto') expression block
 for_variable = identifier
 
 expression_start = expression EOF
-expression = multiplication (('+' / '-') multiplication)*
+expression = additive ('&&' additive)*
+additive = multiplication (('+' / '-') multiplication)*
 multiplication = unary (('*' / '/' / '%') unary)*
 unary = ('+' / '-' / '!')* primary
 primary = decimal / boolean / parenthesis / rhs_variable
