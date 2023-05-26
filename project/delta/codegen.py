@@ -15,6 +15,8 @@ class CodeGenerationVisitor(PTNodeVisitor):
     def __init__(self, symbol_table, **kwargs):
         super().__init__(**kwargs)
         self.__symbol_table = symbol_table
+        self.__label_counter = 0
+        self.__label_stack = []
 
     def visit_program_start(self, node, children):
 
@@ -159,3 +161,21 @@ class CodeGenerationVisitor(PTNodeVisitor):
 
     def visit_for_variable(self, node, _):
         return node.value
+
+    def visit_loop(self, node, children):
+        label = self.__label_stack.pop()
+        return (f'    block {label}\n'
+                + '    loop\n'
+                + children[0]
+                + '    br 0\n'
+                + '    end\n'
+                + '    end\n')
+
+    def visit_loop_start(self, node, children):
+        self.__label_stack.append(f'${self.__label_counter:05}')
+        self.__label_counter += 1
+        return None
+
+    def visit_exit(self, node, children):
+        label = self.__label_stack[-1]
+        return children[0] + f'    br_if {label}\n'

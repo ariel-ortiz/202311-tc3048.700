@@ -10,7 +10,7 @@ class SemanticMistake(Exception):
 class SemanticVisitor(PTNodeVisitor):
 
     RESERVED_KEYWORDS = ['true', 'false', 'var', 'if', 'else', 'while',
-                         'for', 'upto', 'downto']
+                         'for', 'upto', 'downto', 'loop', 'exit', 'when']
 
     MAX_INT32_VALUE = 2 ** 31 - 1
 
@@ -18,6 +18,7 @@ class SemanticVisitor(PTNodeVisitor):
         super().__init__(**kwargs)
         self.__parser = parser
         self.__symbol_table = []
+        self.__loop_depth = 0
 
     def position(self, node):
         return self.__parser.pos_to_linecol(node.position)
@@ -67,4 +68,17 @@ class SemanticVisitor(PTNodeVisitor):
             raise SemanticMistake(
                 'Undeclared variable in for statement at position '
                 f'{self.position(node)} => {node.value}'
+            )
+
+    def visit_loop(self, node, children):
+        self.__loop_depth -= 1
+
+    def visit_loop_start(self, node, children):
+        self.__loop_depth += 1
+
+    def visit_exit(self, node, children):
+        if self.__loop_depth == 0:
+            raise SemanticMistake(
+                'exit statement used outside loop at position '
+                f'{self.position(node)} => exit'
             )
